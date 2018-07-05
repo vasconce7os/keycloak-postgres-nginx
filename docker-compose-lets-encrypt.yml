@@ -17,8 +17,8 @@ services:
       - keycloak-postgres-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=keycloak
-      - POSTGRES_USER=keycloak
-      - POSTGRES_PASSWORD=$KEYCLOAK_PASSWORD
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     restart: unless-stopped
   keycloak:
     image: "jboss/keycloak-postgres:${KEYCLOAK_VERSION}"
@@ -31,15 +31,15 @@ services:
       - postgres
     environment:
       - POSTGRES_DATABASE=keycloak
-      - POSTGRES_USER=keycloak
-      - POSTGRES_PASSWORD=$KEYCLOAK_PASSWORD
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - PROXY_ADDRESS_FORWARDING=true
-      - KEYCLOAK_USER=admin
+      - KEYCLOAK_USER=$KEYCLOAK_ADMIN
       - KEYCLOAK_PASSWORD=$KEYCLOAK_PASSWORD
       # JBoss is using legacy linking environment variables
       - POSTGRES_PORT_5432_TCP_ADDR=postgres
       - POSTGRES_PORT_5432_TCP_PORT=5432
-      - KEYCLOAK_VERSION
+      - KEYCLOAK_VERSION=$KEYCLOAK_VERSION
     restart: unless-stopped
   nginx:
     image: ernsheong/keycloak-nginx-lets-encrypt
@@ -53,11 +53,11 @@ services:
     environment:
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
-      - KEYCLOAK_DOMAIN
-      - LE_EMAIL
-      - LE_OPTIONS
-      - LE_RENEW_OPTIONS
-      - LE_RENEW_CRON_COMMAND
+      - KEYCLOAK_DOMAIN=$KEYCLOAK_DOMAIN
+      - LE_EMAIL=$LE_EMAIL
+      - LE_OPTIONS=$LE_OPTIONS
+      - LE_RENEW_OPTIONS=$LE_RENEW_OPTIONS
+      - LE_RENEW_CRON_COMMAND=$LE_RENEW_CRON_COMMAND
     ports:
       - "80:80"
       - "443:443"
